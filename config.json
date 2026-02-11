@@ -3,6 +3,10 @@
     "compans": "data/meteo_compans.csv",
     "marengo": "data/meteo_marengo.csv"
   },
+  "update_sources": {
+    "compans": "data/update_compans.csv",
+    "marengo": "data/update_marengo.csv"
+  },
   "stations": [
     {
       "id": 42,
@@ -14,5 +18,20 @@
       "name": "Marengo",
       "type": "ISS"
     }
-  ]
+  ],
+  "api": {
+    "base_url": "https://data.toulouse-metropole.fr/api/explore/v2.1/catalog/datasets",
+    "stations": [
+      {
+        "id": 42,
+        "name": "Toulouse Compans Cafarelli",
+        "dataset": "42-station-meteo-toulouse-parc-compans-cafarelli"
+      },
+      {
+        "id": 2,
+        "name": "Toulouse Marengo",
+        "dataset": "02-station-meteo-toulouse-marengo"
+      }
+    ]
+  }
 }

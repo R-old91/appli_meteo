@@ -11,7 +11,7 @@ from typing import Optional
 class WeatherData:
     """
     Value Object représentant les données météorologiques à un instant donné.
-    
+
     Attributes:
         temperature: Température en degrés Celsius
         humidity: Humidité en pourcentage
@@ -24,12 +24,12 @@ class WeatherData:
     timestamp: datetime
     pressure: Optional[int] = None
     rain: Optional[float] = None
-    
+
     def __str__(self) -> str:
         """Retourne une représentation textuelle formatée des données météo."""
         time_str = self.timestamp.strftime("%Y-%m-%d %H:%M")
         return f"[{time_str}] Température: {self.temperature}°C, Humidité: {self.humidity}%"
-    
+
     def get_detailed_info(self) -> str:
         """Retourne une représentation détaillée incluant toutes les données disponibles."""
         info = str(self)

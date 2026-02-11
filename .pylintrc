@@ -1,0 +1,20 @@
+[MAIN]
+# Configuration pylint pour l'Application Météo
+
+[MESSAGES CONTROL]
+# Désactiver les avertissements acceptables :
+# W0718: broad-exception-caught - Acceptable dans main.py (CLI, catch-all pour UX)
+# R0801: duplicate-code - Code similaire entre Repository et WeatherUpdater (pattern voulu)
+disable=W0718,R0801
+
+[FORMAT]
+# Longueur maximale d'une ligne
+max-line-length=100
+
+[BASIC]
+# Conventions de nommage françaises acceptées
+good-names=i,e,f,ll,wd
+
+[DESIGN]
+# Nombre maximum d'arguments
+max-args=6

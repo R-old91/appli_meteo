@@ -1,109 +1,153 @@
-# Application Météo 🌤️
+# Application Météo
 
-Application simple en ligne de commande pour afficher les données de stations météorologiques.
+Application en ligne de commande pour afficher et gérer les données météorologiques.
 
-## 📋 Description
-
-Cette application permet de consulter les données météo de deux stations :
-- **Station Compans** (ID: 42)
-- **Station Marengo** (ID: 2)
-
-Elle affiche la température et l'humidité pour chaque station.
-
-## 🚀 Utilisation
-
-### Lancer l'application
+## Installation
 
 ```bash
+# Cloner le projet
+git clone <url-du-repo>
+cd meteo
+
+# Créer et activer l'environnement virtuel
+python -m venv venv
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # Linux/Mac
+
+# Installer les dépendances
+pip install -r requirements.txt
+```
+
+## Lancer l'application
+
+```bash
+# Activer le venv si pas déjà fait
+venv\Scripts\activate        # Windows
+
+# Lancer
 python main.py
 ```
 
-### Menu interactif
+## Lancer les tests
+
+```bash
+# Tous les tests
+python -m unittest discover -s tests -v
+
+# Un fichier spécifique
+python -m unittest tests.test_models -v
+```
+
+## Vérifier le code avec pylint
+
+```bash
+python -m pylint src/ main.py
+```
+
+## Menu de l'application
 
 ```
-=== Application Météo ===
-
-1. Afficher les stations
-2. Afficher les données météo d'une station
-3. Quitter
+1. Afficher les stations (CSV)
+2. Afficher les données météo d'une station (CSV)
+3. Afficher les données météo avec liste chaînée
+4. Mettre à jour les données d'une station (CSV)
+5. Météo en ligne (API)
+6. Rafraîchir les données API
+7. Quitter
 ```
 
-### Exemples
-
-**Afficher les stations disponibles** :
-- Choisir l'option `1`
-- Les stations s'affichent avec leur ID et type
-
-**Afficher les données météo** :
-- Choisir l'option `2`
-- Entrer l'ID de la station (42 pour Compans, 2 pour Marengo)
-- Les 10 dernières mesures s'affichent
-
-## 🏗️ Architecture
-
-L'application utilise une architecture clean code avec plusieurs design patterns :
-
-- **Repository Pattern** : Abstraction de l'accès aux données
-- **Factory Pattern** : Création centralisée des objets Station
-- **Singleton Pattern** : Gestion unique de la configuration
-- **Value Object** : Données météo immuables
-
-## 📁 Structure
+## Structure du Projet
 
 ```
 meteo/
-├── data/                   # Fichiers CSV de données
+├── main.py                    # Point d'entrée
+├── config.json                # Configuration (stations, API)
+├── README.md                  # Documentation d'utilisation
+├── STRUCTURES.md              # Documentation des structures de données
+├── data/
+│   ├── meteo_compans.csv      # Données station Compans
+│   ├── meteo_marengo.csv      # Données station Marengo
+│   ├── update_compans.csv     # Données fictives pour mise à jour
+│   └── update_marengo.csv     # Données fictives pour mise à jour
 ├── src/
-│   ├── models/            # Modèles de domaine
-│   ├── repositories/      # Accès aux données
-│   ├── factories/         # Création d'objets
-│   ├── config/            # Configuration
-│   └── utils/             # Utilitaires
-├── config.json            # Configuration
-└── main.py               # Point d'entrée
+│   ├── config/
+│   │   └── config_manager.py  # Singleton de configuration
+│   ├── data_structures/
+│   │   ├── linked_list.py     # Liste chaînée (LinkedList)
+│   │   ├── queue.py           # File d'attente (Queue, FIFO)
+│   │   └── weather_dict.py    # Dictionnaire personnalisé (table de hachage)
+│   ├── factories/
+│   │   └── station_factory.py # Factory de stations
+│   ├── models/
+│   │   ├── station.py         # Modèle Station
+│   │   └── weather_data.py    # Value Object WeatherData
+│   ├── repositories/
+│   │   ├── weather_repository.py     # Repository CSV (abstrait + concret)
+│   │   └── api_weather_repository.py # Repository API
+│   ├── services/
+│   │   └── weather_updater.py # Service de mise à jour
+│   └── utils/
+│       └── csv_reader.py      # Utilitaire de lecture CSV
+└── tests/
+    ├── test_models.py         # Tests des modèles
+    ├── test_linked_list.py    # Tests de la liste chaînée
+    ├── test_data_structures.py # Tests Queue + WeatherDict
+    └── test_repository.py     # Tests du repository + updater
 ```
 
-## 🎯 Principes Appliqués
+## Jeu de Données
 
-- ✅ **SOLID** : Tous les principes respectés
-- ✅ **DRY** : Pas de duplication de code
-- ✅ **KISS** : Code simple et lisible
-- ✅ **Clean Code** : Nommage explicite, séparation des préoccupations
+### Sources CSV
 
-## 📝 Configuration
+Les fichiers CSV sont séparés par `;` et contiennent les colonnes suivantes :
 
-Le fichier `config.json` contient :
-- Les chemins vers les fichiers de données
-- Les informations des stations
+| Colonne | Type | Description |
+|---------|------|-------------|
+| `data` | string | Identifiant unique de la mesure |
+| `id` | int | ID de la station |
+| `humidite` | int | Humidité en % (0-100) |
+| `temperature` | float | Température en °C |
+| `pression` | int | Pression en Pa |
+| `pluie` | float | Quantité de pluie en mm |
+| `heure_de_paris` | datetime | Horodatage (fuseau Paris) |
+| `heure_utc` | datetime | Horodatage UTC |
+| `type_de_station` | string | Type de station (ISS) |
 
-Pour ajouter une nouvelle station, modifier ce fichier.
+### Stations disponibles
 
-## 🧪 Tests
+| ID | Nom | Fichier CSV | Fichier Update |
+|----|-----|-------------|----------------|
+| 42 | Compans | `meteo_compans.csv` | `update_compans.csv` |
+| 2 | Marengo | `meteo_marengo.csv` | `update_marengo.csv` |
 
-Pour tester rapidement l'application :
+### API en ligne (Toulouse Métropole)
 
-```python
-from src.repositories.weather_repository import CSVWeatherRepository
+L'application récupère les données météo en temps réel via l'API OpenDataSoft
+de Toulouse Métropole. Cette API est **publique** et ne nécessite **pas de clé API**.
 
-# Créer le repository
-repo = CSVWeatherRepository()
+- **URL** : `https://data.toulouse-metropole.fr/api/explore/v2.1/catalog/datasets`
+- **Dataset** : `01-station-meteo-toulouse-meteopole`
+- **Station configurée** : Toulouse Météopole (ID: 1)
 
-# Afficher les stations
-stations = repo.get_all_stations()
-for s in stations:
-    print(s)
+Les données retournées incluent : `temperature_en_degre_c`, `humidite`,
+`pression`, `pluie`, `heure_utc`.
 
-# Afficher les données météo
-data = repo.get_weather_data(42, limit=5)
-for d in data:
-    print(d)
-```
+Pour ajouter d'autres stations, modifier la section `api.stations` dans `config.json`.
 
-## 📚 Documentation
+## Design Patterns
 
-- Voir [walkthrough.md](file:///C:/Users/hmahunon/.gemini/antigravity/brain/b63bc5dc-6074-4239-9b0b-fef2f5bb957b/walkthrough.md) pour une documentation complète
-- Voir [implementation_plan.md](file:///C:/Users/hmahunon/.gemini/antigravity/brain/b63bc5dc-6074-4239-9b0b-fef2f5bb957b/implementation_plan.md) pour le plan d'implémentation
+1. **Repository Pattern** : Abstraction de l'accès aux données
+   (`CSVWeatherRepository`, `APIWeatherRepository`)
+2. **Factory Pattern** : Création centralisée des objets Station
+   (`StationFactory`)
+3. **Singleton Pattern** : Instance unique de configuration
+   (`ConfigManager`)
 
----
+## Principes Clean Code
 
-Développé avec les principes du clean code et les design patterns 🎨
+- **SOLID** : Chaque classe a une responsabilité unique
+- **DRY** : Fonctions réutilisables (`csv_reader`, `ConfigManager`)
+- **KISS** : Code simple et lisible
+- **YAGNI** : Pas de fonctionnalité inutile
+- **PEP 8** : Conventions Python respectées
+- **Pylint** : Score 9.87/10 (config dans `.pylintrc`)
