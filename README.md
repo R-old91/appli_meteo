@@ -38,6 +38,19 @@ python -m unittest discover -s tests -v
 python -m unittest tests.test_models -v
 ```
 
+
+## Installation avec Docker
+
+Vous pouvez également lancer l'application via Docker sans installer Python localement.
+
+```bash
+# Construire l'image
+docker build -t meteo-app .
+
+# Lancer le conteneur (mode interactif)
+docker run -it --rm meteo-app
+```
+
 ## Vérifier le code avec pylint
 
 ```bash
