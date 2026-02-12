@@ -7,7 +7,7 @@ Application en ligne de commande pour afficher et gérer les données météorol
 ```bash
 # Cloner le projet
 git clone <url-du-repo>
-cd meteo
+cd appli_meteo
 
 # Créer et activer l'environnement virtuel
 python -m venv venv
